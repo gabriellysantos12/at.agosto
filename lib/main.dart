@@ -19,7 +19,7 @@ class MeuPerfilApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const CatalogoPage(),
+      home: const CadastroPage(),
     );
   }
 }
@@ -223,6 +223,163 @@ class CatalogoPage extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+
+ // ATIVIDADE 3: FORMULÁRIO INTERATIVO COM ESTADO
+
+class CadastroPage extends StatefulWidget {
+  const CadastroPage({super.key});
+
+  @override
+  State<CadastroPage> createState() => _CadastroPageState();
+}
+
+class _CadastroPageState extends State<CadastroPage> {
+  final TextEditingController nomeController =
+      TextEditingController();
+
+  final TextEditingController profissaoController =
+      TextEditingController();
+
+  String nomeCadastrado = '';
+  String profissaoCadastrada = '';
+
+  void cadastrar() {
+    final nome = nomeController.text.trim();
+    final profissao = profissaoController.text.trim();
+
+    if (nome.isEmpty || profissao.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Preencha os dois campos!'),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      nomeCadastrado = nome;
+      profissaoCadastrada = profissao;
+    });
+  }
+
+  @override
+  void dispose() {
+    nomeController.dispose();
+    profissaoController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cadastro Profissional'),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Icon(
+              Icons.person_outline,
+              size: 65,
+              color: Colors.deepPurple,
+            ),
+
+            const SizedBox(height: 10),
+
+            const Text(
+              'Cadastre seu perfil profissional',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 21,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            TextFormField(
+              controller: nomeController,
+              decoration: const InputDecoration(
+                labelText: 'Nome',
+                prefixIcon: Icon(Icons.person),
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            TextFormField(
+              controller: profissaoController,
+              decoration: const InputDecoration(
+                labelText: 'Profissão / Cargo desejado',
+                prefixIcon: Icon(Icons.work),
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            ElevatedButton.icon(
+              onPressed: cadastrar,
+              icon: const Icon(Icons.person_add),
+              label: const Text('Cadastrar'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurple,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.all(16),
+              ),
+            ),
+
+            if (nomeCadastrado.isNotEmpty) ...[
+              const SizedBox(height: 25),
+
+              Card(
+                color: Colors.deepPurple.shade50,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.celebration,
+                        size: 40,
+                        color: Colors.deepPurple,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      Text(
+                        'Bem-vindo(a), $nomeCadastrado!',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurple,
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      Text(
+                        'Cargo cadastrado: '
+                        '$profissaoCadastrada',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
